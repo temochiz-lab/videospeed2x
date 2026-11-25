@@ -4,7 +4,16 @@ function setPlaybackRate(rate) {
   if (!state) {
     state = {
       rate,
+      observedVideos: new WeakSet(),
       applyRate(video) {
+        if (!state.observedVideos.has(video)) {
+          state.observedVideos.add(video);
+          const enforceRate = () => {
+            if (video.playbackRate !== state.rate) video.playbackRate = state.rate;
+          };
+          video.addEventListener('ratechange', enforceRate);
+          video.addEventListener('loadedmetadata', enforceRate);
+        }
         if (video.playbackRate !== state.rate) video.playbackRate = state.rate;
       }
     };
