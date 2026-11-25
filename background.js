@@ -22,7 +22,7 @@ function setNextSpeedIcon(tabId, rate) {
   });
 }
 
-browser.browserAction.onClicked.addListener((tab) => {
+function togglePlayback(tab) {
   const current = tabPlaybackRateMap.get(tab.id);
   const target = current === undefined ? 2.0 : (current === 2.0 ? 1.5 : 2.0);
 
@@ -61,6 +61,16 @@ browser.browserAction.onClicked.addListener((tab) => {
 
   tabPlaybackRateMap.set(tab.id, target);
   setNextSpeedIcon(tab.id, target === 2.0 ? 1.5 : 2.0);
+}
+
+browser.browserAction.onClicked.addListener(togglePlayback);
+
+browser.commands.onCommand.addListener((command) => {
+  if (command !== 'toggle-speed') return;
+
+  browser.tabs.query({ active: true, currentWindow: true }).then(([tab]) => {
+    if (tab) togglePlayback(tab);
+  });
 });
 
 browser.tabs.onRemoved.addListener((tabId) => {
