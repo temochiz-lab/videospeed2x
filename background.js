@@ -82,9 +82,8 @@ browser.tabs.onRemoved.addListener((tabId) => {
   tabPlaybackRateMap.delete(tabId);
 });
 
-browser.tabs.onUpdated.addListener((tabId, changeInfo) => {
-  if (changeInfo.status === 'loading') {
-    tabPlaybackRateMap.delete(tabId);
-    setNextSpeedIcon(tabId, 2.0);
-  }
+browser.runtime.onMessage.addListener((message, sender) => {
+  if (message.type !== 'getPlaybackRate' || sender.tab === undefined) return;
+
+  return Promise.resolve({ rate: tabPlaybackRateMap.get(sender.tab.id) });
 });
