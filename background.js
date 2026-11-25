@@ -1,8 +1,13 @@
 const tabPlaybackRateMap = new Map();
+const playbackRates = [2.0, 1.5, 1.0];
+
+function nextPlaybackRate(rate) {
+  const index = playbackRates.indexOf(rate);
+  return playbackRates[(index + 1) % playbackRates.length];
+}
 
 function setNextSpeedIcon(tabId, rate) {
-  const is15x = rate === 1.5;
-  const suffix = is15x ? '-15' : '';
+  const suffix = rate === 1.5 ? '-15' : (rate === 1.0 ? '-1' : '');
 
   browser.browserAction.setIcon({
     tabId,
@@ -18,13 +23,13 @@ function setNextSpeedIcon(tabId, rate) {
   });
   browser.browserAction.setTitle({
     tabId,
-    title: is15x ? '次に押すと1.5倍' : '次に押すと2倍'
+    title: `次に押すと${rate}倍`
   });
 }
 
 function togglePlayback(tab) {
   const current = tabPlaybackRateMap.get(tab.id);
-  const target = current === undefined ? 2.0 : (current === 2.0 ? 1.5 : 2.0);
+  const target = current === undefined ? playbackRates[0] : nextPlaybackRate(current);
 
   browser.tabs.executeScript(tab.id, {
     code: `
@@ -60,7 +65,7 @@ function togglePlayback(tab) {
   });
 
   tabPlaybackRateMap.set(tab.id, target);
-  setNextSpeedIcon(tab.id, target === 2.0 ? 1.5 : 2.0);
+  setNextSpeedIcon(tab.id, nextPlaybackRate(target));
 }
 
 browser.browserAction.onClicked.addListener(togglePlayback);
