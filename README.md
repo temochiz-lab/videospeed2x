@@ -25,12 +25,13 @@ Double playback speed with the touch of a button
 
 ## バージョン
 
-- 拡張機能: 1.0.5
-- ビルド: build+20261125.161123
+- 拡張機能: 1.0.6
+- ビルド: build+20261125.161647
 
 ## ライセンス
 
 [MIT License](LICENSE)
+
 
 
 
