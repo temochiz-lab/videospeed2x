@@ -8,6 +8,10 @@
 - ページ内で新しく読み込まれた動画にも、選択した速度を適用します。YouTube の動画切り替えにも対応します。
 - タブごとに速度を管理します。ページを再読み込みすると初期状態に戻ります。
 
+## Firefox アドオン
+
+[Firefox Add-ons のページ](https://addons.mozilla.org/ja/firefox/addon/video-speed-2x/)
+
 ## インストール
 
 1. このリポジトリをダウンロードまたはクローンします。
