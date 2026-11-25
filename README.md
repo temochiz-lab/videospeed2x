@@ -5,9 +5,9 @@
 ボタン一発で再生速度2倍  
 Double playback speed with the touch of a button.
 
-ツールバーボタンまたはキーボードショートカットで、動画の再生速度を2倍、1.5倍、1倍の順に切り替えます。同じページ内で次の動画へ切り替わったときや、YouTubeの別ページや別タブを開いたときも、選択した速度を適用します。
+ツールバーボタンまたはキーボードショートカットで、動画の再生速度を2倍、1.5倍、1倍の順に切り替えます。選択速度を YouTube の別タブや別ページでも共有し、動画側が速度を戻した場合も設定を保ちます。
 
-Use the toolbar button or press **Alt+Shift+S** to cycle through 2x, 1.5x, and 1x playback speeds. In Firefox, you can change this shortcut in the extension shortcut settings. The selected speed is shared across YouTube tabs and remains selected when you open another YouTube page. On other sites, clicking the toolbar button affects that page.
+Use the toolbar button or press **Alt+Shift+S** to cycle through 2x, 1.5x, and 1x playback speeds. In Firefox, you can change this shortcut in the extension shortcut settings. The selected speed is shared across YouTube tabs and pages, and is reapplied if the video player resets it. On other sites, clicking the toolbar button affects that page.
 
 ## 操作
 
@@ -28,12 +28,13 @@ Use the toolbar button or press **Alt+Shift+S** to cycle through 2x, 1.5x, and 1
 
 ## バージョン
 
-- 拡張機能: 1.1.1
-- ビルド: build+20261125.165355
+- 拡張機能: 1.1.2
+- ビルド: build+20261125.165556
 
 ## ライセンス
 
 [MIT License](LICENSE)
+
 
 
 
