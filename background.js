@@ -5,7 +5,7 @@ function nextPlaybackRate(rate) {
   return playbackRates[(index + 1) % playbackRates.length];
 }
 
-function setNextSpeedIcon(rate) {
+function setSpeedIcon(rate) {
   const suffix = rate === 1.5 ? '-15' : (rate === 1.0 ? '-1' : '');
 
   browser.browserAction.setIcon({
@@ -19,7 +19,7 @@ function setNextSpeedIcon(rate) {
       256: `icon-256${suffix}.png`
     }
   });
-  browser.browserAction.setTitle({ title: `次に押すと${rate}倍` });
+  browser.browserAction.setTitle({ title: `現在の速度は${rate}倍` });
 }
 
 function applyRateToTab(tabId, rate) {
@@ -72,7 +72,7 @@ function togglePlayback(tab) {
 
     browser.storage.local.set({ playbackRate: target }).then(() => {
       applyRateToTab(tab.id, target);
-      setNextSpeedIcon(nextPlaybackRate(target));
+      setSpeedIcon(target);
     });
   });
 }
@@ -89,10 +89,10 @@ browser.commands.onCommand.addListener((command) => {
 
 browser.storage.onChanged.addListener((changes, areaName) => {
   if (areaName === 'local' && changes.playbackRate) {
-    setNextSpeedIcon(nextPlaybackRate(changes.playbackRate.newValue));
+    setSpeedIcon(changes.playbackRate.newValue ?? 1.0);
   }
 });
 
 browser.storage.local.get('playbackRate').then(({ playbackRate }) => {
-  setNextSpeedIcon(playbackRate === undefined ? playbackRates[0] : nextPlaybackRate(playbackRate));
+  setSpeedIcon(playbackRate ?? 1.0);
 });
