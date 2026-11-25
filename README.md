@@ -1,11 +1,13 @@
 # Video Speed Booster
 
-## この拡張機能について
+## この拡張機能について / About This Extension
 
 ボタン一発で再生速度2倍  
-Double playback speed with the touch of a button
+Double playback speed with the touch of a button.
 
 ツールバーボタンまたはキーボードショートカットで、動画の再生速度を2倍と1.5倍に切り替えます。YouTube などで次の動画に切り替わったときも、選択した速度を適用します。
+
+Use the toolbar button or press **Alt+Shift+S** to switch video playback between 2x and 1.5x. In Firefox, you can change this shortcut in the extension shortcut settings. The selected speed continues to apply when YouTube or another site switches to the next video.
 
 ## 操作
 
@@ -31,7 +33,6 @@ Double playback speed with the touch of a button
 ## ライセンス
 
 [MIT License](LICENSE)
-
 
 
 
