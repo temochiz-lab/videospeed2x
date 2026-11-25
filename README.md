@@ -29,11 +29,12 @@ Use the toolbar button or press **Alt+Shift+S** to cycle through 2x, 1.5x, and 1
 ## バージョン
 
 - 拡張機能: 1.1.0
-- ビルド: build+20261125.163403
+- ビルド: build+20261125.164153
 
 ## ライセンス
 
 [MIT License](LICENSE)
+
 
 
 
