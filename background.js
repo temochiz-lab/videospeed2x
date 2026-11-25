@@ -1,4 +1,3 @@
-const tabPlaybackRateMap = new Map();
 const playbackRates = [2.0, 1.5, 1.0];
 
 function nextPlaybackRate(rate) {
@@ -6,11 +5,10 @@ function nextPlaybackRate(rate) {
   return playbackRates[(index + 1) % playbackRates.length];
 }
 
-function setNextSpeedIcon(tabId, rate) {
+function setNextSpeedIcon(rate) {
   const suffix = rate === 1.5 ? '-15' : (rate === 1.0 ? '-1' : '');
 
   browser.browserAction.setIcon({
-    tabId,
     path: {
       16: `icon-16${suffix}.png`,
       32: `icon-32${suffix}.png`,
@@ -21,20 +19,14 @@ function setNextSpeedIcon(tabId, rate) {
       256: `icon-256${suffix}.png`
     }
   });
-  browser.browserAction.setTitle({
-    tabId,
-    title: `次に押すと${rate}倍`
-  });
+  browser.browserAction.setTitle({ title: `次に押すと${rate}倍` });
 }
 
-function togglePlayback(tab) {
-  const current = tabPlaybackRateMap.get(tab.id);
-  const target = current === undefined ? playbackRates[0] : nextPlaybackRate(current);
-
-  browser.tabs.executeScript(tab.id, {
+function applyRateToTab(tabId, rate) {
+  browser.tabs.executeScript(tabId, {
     code: `
       (() => {
-        const rate = ${target};
+        const rate = ${rate};
         let state = window.__videoSpeedBooster;
 
         if (!state) {
@@ -63,9 +55,17 @@ function togglePlayback(tab) {
     `,
     allFrames: true
   });
+}
 
-  tabPlaybackRateMap.set(tab.id, target);
-  setNextSpeedIcon(tab.id, nextPlaybackRate(target));
+function togglePlayback(tab) {
+  browser.storage.local.get('playbackRate').then(({ playbackRate }) => {
+    const target = playbackRate === undefined ? playbackRates[0] : nextPlaybackRate(playbackRate);
+
+    browser.storage.local.set({ playbackRate: target }).then(() => {
+      applyRateToTab(tab.id, target);
+      setNextSpeedIcon(nextPlaybackRate(target));
+    });
+  });
 }
 
 browser.browserAction.onClicked.addListener(togglePlayback);
@@ -78,12 +78,12 @@ browser.commands.onCommand.addListener((command) => {
   });
 });
 
-browser.tabs.onRemoved.addListener((tabId) => {
-  tabPlaybackRateMap.delete(tabId);
+browser.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'local' && changes.playbackRate) {
+    setNextSpeedIcon(nextPlaybackRate(changes.playbackRate.newValue));
+  }
 });
 
-browser.runtime.onMessage.addListener((message, sender) => {
-  if (message.type !== 'getPlaybackRate' || sender.tab === undefined) return;
-
-  return Promise.resolve({ rate: tabPlaybackRateMap.get(sender.tab.id) });
+browser.storage.local.get('playbackRate').then(({ playbackRate }) => {
+  setNextSpeedIcon(playbackRate === undefined ? playbackRates[0] : nextPlaybackRate(playbackRate));
 });
